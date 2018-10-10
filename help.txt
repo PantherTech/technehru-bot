@@ -1,0 +1,11 @@
+Hello there! This is the help to use *technehru-bot*. These are the few things you can do:
+
+* **Reopen an issue:** @Technehru github reopen issue <repo-name> <issue-number>
+* **Comment on an issue:** @Technehru github comment issue <repo-name> <issue-number> <single-line-comment>
+* **Close an issue:** @Technehru github close issue <repo-name> <issue-number>
+* **Assign an issue:** @Technehru github assign issue <repo-name> <issue-number> <assignee-username>
+* **Hackernews:** @Technehru HN | @Technehru hackernews
+* **Cricket News:** @Technehru cricnews | @Technehru cricketnews
+* **Holidays:** @Technehru holiday
+
+Also you can ask anything in general it will entertain you with a nice conversation.

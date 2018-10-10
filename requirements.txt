@@ -8,3 +8,4 @@ ChatterBot==0.8.1
 nltk==3.2.5
 google_api_python_client==1.6.5
 httplib2==0.10.3
+github3.py

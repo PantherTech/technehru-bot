@@ -7,7 +7,7 @@ class Holiday(object):
 
 		holiday_date = ""
 
-		for key,value in dates.iteritems():
+		for key,value in dates.items():
 			print(key,"+",value[0]["name"])
 			holiday_date += value[0]["date"]+" - "+value[0]["name"]+"\n"
 

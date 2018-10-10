@@ -14,7 +14,7 @@ from lyrics import Lyrics
 from holiday import Holiday
 from currency import Currency
 from cricket import Cricket
-
+from github import GitHub
 
 
 p = pprint.PrettyPrinter()
@@ -31,10 +31,11 @@ class ZulipBot(object):
 		self.holiday = Holiday()
 		self.currency = Currency()
 		self.cricket = Cricket()
+		self.github = GitHub()
 		self.chatbot = ChatBot(name="technehru")
 
 		print("done init")
-		self.subkeys = ["translate", "hackernews", "hn", "hotel", "HN", "askme", "cricnews", "movie", "currency", "holiday", "lyrics"]
+		self.subkeys = ["use", "help", "translate", "hackernews", "hn", "hotel", "HN", "cricnews", "cricketnews", "movie", "currency", "holiday", "lyrics", "github"]
 
 	def subscribe_all(self):
 		json = self.client.get_streams()["streams"]
@@ -56,6 +57,15 @@ class ZulipBot(object):
 		print("Sucessfully heard.")
 
 		if content[0].lower() == "technehru" or content[0] == "@**Technehru**":
+			if content[1].lower() == "help" or content[1].lower() == "use":
+				message = open("help.txt", "r")
+				self.client.send_message({
+					"type": "stream",
+					"to": stream_name,
+					"subject": stream_topic,
+					"content": message.read()
+					})
+
 			if content[1].lower() == "translate":
 				ip = content[2:]
 				ip = " ".join(ip)
@@ -76,7 +86,7 @@ class ZulipBot(object):
 					"to": msg["display_recipient"],
 					"content": message
 					})
-			
+
 			if content[1].lower() == "lyrics":
 				author = content[2]
 				title = content[3:]
@@ -88,6 +98,7 @@ class ZulipBot(object):
 					"to": msg["display_recipient"],
 					"content": message
 					})
+
 			if content[1].lower() == 'holiday':
 				quote_data = self.holiday.holiday()
 				self.client.send_message({
@@ -96,7 +107,7 @@ class ZulipBot(object):
 					"subject": stream_topic,
 					"content": quote_data
 					})
-			
+
 			if content[1].lower() == 'currency':
 				x = content[2]
 				y = content[3]
@@ -108,8 +119,8 @@ class ZulipBot(object):
 					"subject": stream_topic,
 					"content": quote_data
 					})
-			
-			if content[1].lower() == "cricnews":
+
+			if content[1].lower() == "cricnews" or content[1].lower() == "cricketnews":
 				news = self.cricket.news()
 				self.client.send_message({
 					"type": "stream",
@@ -117,9 +128,8 @@ class ZulipBot(object):
 					"to": msg["display_recipient"],
 					"content": news  
 					})
-			
-			
-			if content[1].lower() == 'hackernews' or content[1].lower() == 'hn' or content[1].lower() == 'HN':
+
+			if content[1].lower() == 'hackernews' or content[1].lower() == 'hn':
 				news = self.hacknews.get_hackernews()
 				self.client.send_message({
 					"type": "stream",
@@ -127,6 +137,55 @@ class ZulipBot(object):
 					"subject": stream_topic,
 					"content": news
 					})
+
+			if content[1].lower() == 'github':
+				if content[2].lower() == 'reopen' and content[3].lower() == 'issue':
+					repo = content[4]
+					num = int(content[5])
+					result = self.github.reopen_issue(repo, num)
+					self.client.send_message({
+						"type": "stream",
+						"to": stream_name,
+						"subject": stream_topic,
+						"content": result  
+						})
+
+				if content[2].lower() == 'comment' and content[3].lower() == 'issue':
+					repo = content[4]
+					num = int(content[5])
+					comment = content[6:]
+					comment = " ".join(comment)
+					result = self.github.comment_issue(repo, num, comment)
+					self.client.send_message({
+						"type": "stream",
+						"to": stream_name,
+						"subject": stream_topic,
+						"content": result  
+						})
+
+				if content[2].lower() == 'close' and content[3].lower() == 'issue':
+					repo = content[4]
+					num = int(content[5])
+					result = self.github.close_issue(repo, num)
+					self.client.send_message({
+						"type": "stream",
+						"to": stream_name,
+						"subject": stream_topic,
+						"content": result  
+						})
+
+				if content[2].lower() == 'assign' and content[3].lower() == 'issue':
+					repo = content[4]
+					num = int(content[5])
+					assignee = content[6]
+					result = self.github.assign_issue(repo, num, assignee)
+					self.client.send_message({
+						"type": "stream",
+						"to": stream_name,
+						"subject": stream_topic,
+						"content": result  
+						})
+
 
 			if content[1] not in self.subkeys:
 				ip = content[1:]
